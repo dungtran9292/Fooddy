@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "730237795342",
+    "firebase_url": "https://foody-4a606.firebaseio.com",
+    "project_id": "foody-4a606",
+    "storage_bucket": "foody-4a606.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730237795342:android:2b7c20f32d28744f",
+        "android_client_info": {
+          "package_name": "com.example.hoang.fooddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "730237795342-mo189s3o9f9dk5r1o9m93uansjipkkge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hoang.fooddy",
+            "certificate_hash": "88c55c82ed063096eefac4c39f8319ab29146b80"
+          }
+        },
+        {
+          "client_id": "730237795342-ighb92nh99t6utj4uke96dmqf0e1q0n6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUCPO9rQwzuDhceLl-sMQfBfl-EAo4y7o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "730237795342-ighb92nh99t6utj4uke96dmqf0e1q0n6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
