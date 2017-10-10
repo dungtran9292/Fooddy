@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:layout_gravity="center">
+  <com.example.hoang.fooddy.View.ImageViewHelper
+      android:id="@+id/image_out"
+      android:layout_width="100dp"
+      android:layout_height="60dp"
+      android:src="@drawable/download"
+      />
+  <com.example.hoang.fooddy.View.CircleImageView
+      android:id="@+id/image_in"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      app:civ_border_width="2dp"
+      app:civ_border_color="#FFF"
+      android:layout_marginTop="45dp"
+      android:src="@drawable/download"
+      android:layout_centerHorizontal="true" />
+  <TextView
+      android:id="@+id/tv_title_item"
+      android:layout_below="@+id/image_in"
+      android:layout_marginTop="10dp"
+      android:text="Kham Pha"
+      android:textStyle="bold"
+      android:layout_centerHorizontal="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+</RelativeLayout>

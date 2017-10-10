@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.hoang.fooddy.CustomItemClickListener;
+import com.example.hoang.fooddy.Interface.CustomItemClickListener;
 import com.example.hoang.fooddy.R;
 
 /**
