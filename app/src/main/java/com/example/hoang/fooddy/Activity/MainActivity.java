@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.example.hoang.fooddy.Adapter.AdapterItem;
 import com.example.hoang.fooddy.DAO.ItemType;
 import com.example.hoang.fooddy.R;
@@ -37,6 +36,8 @@ public class MainActivity extends BaseActivity {
         mList.add(item2);
         mList.add(item3);
         mList.add(item4);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
         mList.add(item5);
         adapterItem.notifyDataSetChanged();
 
