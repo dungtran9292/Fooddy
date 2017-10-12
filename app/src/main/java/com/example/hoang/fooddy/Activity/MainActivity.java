@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity {
         adapterItem = new AdapterItem(mList,MainActivity.this);
         mRecyclerView.setAdapter(adapterItem);
 //        https://stackoverflow.com/questions/29457712/how-to-set-different-columns-for-rows-in-android-gridview
+//        http://techtej.blogspot.com
     }
 
 
