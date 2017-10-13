@@ -1,49 +1,89 @@
 package com.example.hoang.fooddy.Activity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.view.MenuItem;
 
 import com.example.hoang.fooddy.Adapter.AdapterItem;
+import com.example.hoang.fooddy.Adapter.ViewPagerAdapter;
 import com.example.hoang.fooddy.DAO.ItemType;
-import com.example.hoang.fooddy.DAO.User;
+import com.example.hoang.fooddy.Fragment.Fragment_History;
+import com.example.hoang.fooddy.Fragment.Fragment_Listent;
+import com.example.hoang.fooddy.Fragment.Fragment_Main;
+import com.example.hoang.fooddy.Fragment.Fragment_Read;
+import com.example.hoang.fooddy.Fragment.Fragment_Test;
 import com.example.hoang.fooddy.R;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 
 public class MainActivity extends BaseActivity {
 
-    Button btn, btn_confirm;
-    EditText edt;
-    TextView tv;
+    BottomNavigationView bottomNavigationView;
+    ViewPager viewPager;
     RecyclerView mRecyclerView;
     ArrayList<ItemType> mList;
     AdapterItem adapterItem;
-    DatabaseReference database;
+    Fragment_History fragment_history;
+    Fragment_Listent fragment_listent;
+    Fragment_Main fragment_main;
+    Fragment_Read fragment_read;
+    Fragment_Test fragment_test;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       database = FirebaseDatabase.getInstance().getReference();
-        User user1 = new User("dungtran",24,1);
-        writeToFirebase(user1);
-        btn.setOnClickListener(new View.OnClickListener() {
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_speed:
+                                viewPager.setCurrentItem(0);
+                                break;
+                            case R.id.action_history:
+                                viewPager.setCurrentItem(1);
+                                break;
+                            case R.id.action_contact:
+                                viewPager.setCurrentItem(2);
+                                break;
+                            case R.id.action_contact1:
+                                viewPager.setCurrentItem(3);
+                                break;
+                            case R.id.action_bluetooth:
+                                viewPager.setCurrentItem(4);
+                                break;
+
+                        }
+                        return false;
+                    }
+                });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,MapsActivity.class));
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
+
     }
 
     @Override
@@ -54,27 +94,29 @@ public class MainActivity extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void initUI() {
-        btn = (Button) findViewById(R.id.btn);
-        tv = (TextView) findViewById(R.id.tv);
-        edt = (EditText) findViewById(R.id.edt);
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycle);
-        RecyclerView.LayoutManager layoutManager;
-        layoutManager = new GridLayoutManager(MainActivity.this,3);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mList = new ArrayList<>();
-        adapterItem = new AdapterItem(mList,MainActivity.this);
-        mRecyclerView.setAdapter(adapterItem);
-//        https://stackoverflow.com/questions/29457712/how-to-set-different-columns-for-rows-in-android-gridview
-//        http://techtej.blogspot.com
+        //setupRecyclerView();
+        setupNavigationBottom();
+        
     }
 
+    private void setupNavigationBottom() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        fragment_main = new Fragment_Main();
+        fragment_listent = new Fragment_Listent();
+        fragment_read = new Fragment_Read();
+        fragment_history = new Fragment_History();
+        fragment_test = new Fragment_Test();
 
-    public void writeToFirebase(User user){
-        database.child("Users").child(String.valueOf(user.getId())).setValue(user);
+        adapter.addFragment(fragment_main);
+        adapter.addFragment(fragment_history);
+        adapter.addFragment(fragment_listent);
+        adapter.addFragment(fragment_read);
+        adapter.addFragment(fragment_test);
+
+        viewPager.setAdapter(adapter);
 
     }
-
-
 }

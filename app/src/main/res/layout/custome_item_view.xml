@@ -7,6 +7,7 @@
   <com.example.hoang.fooddy.View.ImageViewHelper
       android:id="@+id/image_out"
       android:layout_width="100dp"
+      android:layout_centerHorizontal="true"
       android:layout_height="60dp"
       android:src="@drawable/download"
       />
@@ -23,9 +24,8 @@
   <TextView
       android:id="@+id/tv_title_item"
       android:layout_below="@+id/image_in"
-      android:layout_marginTop="10dp"
+      android:layout_marginTop="5dp"
       android:text="Kham Pha"
-      android:textStyle="bold"
       android:layout_centerHorizontal="true"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content" />

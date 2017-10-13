@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_speed"
+        android:checked="true"
+        android:icon="@drawable/trangchu"
+        android:title="@string/trangchu"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_history"
+        android:checked="false"
+        android:icon="@drawable/nghe"
+        android:title="@string/Nghe"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_contact"
+        android:checked="false"
+        android:icon="@drawable/doc"
+        android:title="@string/doc"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_contact1"
+        android:checked="false"
+        android:icon="@drawable/lichsu"
+        android:title="@string/lichsu"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_bluetooth"
+        android:checked="false"
+        android:icon="@drawable/test"
+        android:title="@string/test"
+        app:showAsAction="ifRoom" />
+
+</menu>

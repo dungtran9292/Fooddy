@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Fooddy</string>
     <string name="title_activity_maps">Map</string>
+    <string name="trangchu">Trang Chu</string>
+    <string name="Nghe">Nghe</string>
+    <string name="doc">Doc</string>
+    <string name="lichsu">Lich Su</string>
+    <string name="test">Test</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
