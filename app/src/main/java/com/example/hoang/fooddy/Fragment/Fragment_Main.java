@@ -2,6 +2,7 @@ package com.example.hoang.fooddy.Fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.hoang.fooddy.Activity.MapsActivity;
 import com.example.hoang.fooddy.Adapter.AdapterItem;
 import com.example.hoang.fooddy.DAO.ItemType;
+import com.example.hoang.fooddy.Interface.ItemClickListener;
 import com.example.hoang.fooddy.R;
 
 import java.util.ArrayList;
@@ -43,6 +46,12 @@ public class Fragment_Main extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initUi(view);
+        adapterItem.setClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                startActivity(new Intent(getActivity(), MapsActivity.class));
+            }
+        });
     }
 
 

@@ -13,6 +13,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.hoang.fooddy.R;
@@ -23,21 +27,57 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mGoogleMap;
-    private LocationManager locationManager;
-    private String bestProvider;
+    Spinner spinner;
+    ArrayList<String> list;
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        adapter = new ArrayAdapter(MapsActivity.this,android.R.layout.simple_spinner_item,list);
+        spinner.setAdapter(adapter);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0){
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }else if (position == 1){
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }else if (position == 2) {
+                    mGoogleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                    MapsActivity.this, R.raw.style_json));
+                    //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                }else if (position == 3){
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -64,9 +104,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double[] latlong = new double[2];
         Log.d("dungtran isMyLocationEnabled ", mGoogleMap.isMyLocationEnabled() + "");
         if (mGoogleMap.isMyLocationEnabled()) {
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
-            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+            String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
             Location location = null;
             //You can still do this if you like, you might get lucky:
             if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -82,10 +122,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //This is what you need:
                 locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
-        } else {
-            //prompt user to enable location....
-            //.................
         }
+//        } else {
+//            //prompt user to enable location....
+//            //.................
+//        }
         return latlong;
     }
 
