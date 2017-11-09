@@ -1,9 +1,12 @@
 package com.example.hoang.fooddy.Activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -38,27 +41,30 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import java.text.DecimalFormat;
+import com.google.maps.android.SphericalUtil;
 
 import static com.example.hoang.fooddy.R.id.map;
+import static com.example.hoang.fooddy.Util.Common.formatNumber;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener,
-        GoogleMap.OnMarkerClickListener,GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks{
+        GoogleMap.OnMarkerClickListener, GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
 
     private GoogleMap mGoogleMap;
-    LatLng currentPosition;
+    LatLng currentPstGPS, positionChange;
     GPSTracker gps;
-    Marker markerGPS, markerGoogle;
+    Marker markerGPS, markerGoogle , markerMatram;
 
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private CameraPosition mCameraPosition;
 
     // The entry points to the Places API.
+    LatLng matram;
     private GeoDataClient mGeoDataClient;
     private PlaceDetectionClient mPlaceDetectionClient;
 
@@ -102,7 +108,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
-
+        gps = new GPSTracker(this);
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -138,60 +144,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        matram = new LatLng(21.004245513724932, 105.81379705667496);
+        mGoogleMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
 
-//        if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            mGoogleMap.setMyLocationEnabled(true);
-//        } else {
-//            Toast.makeText(MapsActivity.this, "You have to accept to enjoy all app's services!", Toast.LENGTH_LONG).show();
-//            if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                    == PackageManager.PERMISSION_GRANTED) {
-//                mGoogleMap.setMyLocationEnabled(true);
-//            }
-//        }
-//        double[] position = getLocation();
-//        LatLng sydney = new LatLng(position[0], position[1]);
-//        LatLng matram = new LatLng(21.004245513724932, 105.81379705667496);
-//
-//
-//        if (gps == null) {
-//            gps = new GPSTracker(MapsActivity.this);
-//        }
-//
-//
-//        LocationManager mlocManager = (LocationManager) MapsActivity.this
-//                .getSystemService(Context.LOCATION_SERVICE);
-//
-//        boolean enabled = mlocManager
-//                .isProviderEnabled(LocationManager.GPS_PROVIDER);
-//        if (enabled) {
-//            if (gps.getLatitude() == 0 && gps.getLongitude() == 0) {
-//                return;
-//            } else {
-//                currentPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
-//
-//            }
-//        }
-//        Log.d("dungtran Position GOOGLE API: ", position[0] + "  " + position[1]);
-//        Log.d("dungtran Position GPS : ", gps.getLatitude() + " " + gps.getLongitude());
-//        mGoogleMap.setOnMarkerClickListener(this);
-//        markerGPS = mGoogleMap.addMarker(new MarkerOptions().position(currentPosition).title("GPS "));
-//        markerGoogle = mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("GoogleMap"));
-//        mGoogleMap.addMarker(new MarkerOptions().position(matram).title("Tram "));
-//        double googleApI = CalculationByDistance(sydney, matram);
-//        double gps = CalculationByDistance(currentPosition, matram);
-//        Log.d("dungtran CalculationByDistance GPS : ", gps + " googleApI : " + googleApI);
-//        Polyline googleAPI = mGoogleMap.addPolyline(new PolylineOptions()
-//                .add(sydney, matram)
-//                .width(5)
-//                .color(Color.RED));
-//        Polyline gpsTracker = mGoogleMap.addPolyline(new PolylineOptions()
-//                .add(currentPosition, matram)
-//                .width(5)
-//                .color(Color.BLUE));
-//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+        if (gps == null) {
+            gps = new GPSTracker(MapsActivity.this);
+        }
+        LocationManager mlocManager = (LocationManager) MapsActivity.this
+                .getSystemService(Context.LOCATION_SERVICE);
 
+        boolean enabled = mlocManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (enabled) {
+            if (gps.getLatitude() == 0 && gps.getLongitude() == 0) {
+                return;
+            } else {
+                currentPstGPS = new LatLng(gps.getLatitude(), gps.getLongitude());
+            }
+        }
+        mGoogleMap.setOnMarkerClickListener(this);
+        markerMatram =  mGoogleMap.addMarker(new MarkerOptions().position(matram).title("Ma Tram"));
+        markerGPS = mGoogleMap.addMarker(new MarkerOptions().position(currentPstGPS).title("GPS "));
+        Polyline gpsTracker = mGoogleMap.addPolyline(new PolylineOptions()
+                .add(currentPstGPS, matram)
+                .width(5)
+                .color(Color.BLUE));
 
 
         // Use a custom info window adapter to handle multiple lines of text in the
@@ -224,13 +202,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
-         updateLocationUI();
+        updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-    }
 
+
+    }
+    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+        @Override
+        public void onMyLocationChange(Location location) {
+             positionChange = new LatLng(location.getLatitude(),
+                    location.getLongitude());
+            if(mGoogleMap != null){
+                mGoogleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(positionChange, 16.0f));
+            }
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -240,6 +230,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Handles a click on the menu option to get a place.
+     *
      * @param item The menu item to handle.
      * @return Boolean.
      */
@@ -285,7 +276,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mLastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -305,16 +296,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             // Set the map's camera position to the current location of the device.
                             Log.d(TAG, "Current location is null. Using defaults. 1");
                             mLastKnownLocation = task.getResult();
-                            mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude())));
+                            markerGoogle = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
+                                   mLastKnownLocation.getLongitude())).title("Google"));
+                            Polyline googleAPI = mGoogleMap.addPolyline(new PolylineOptions()
+                                    .add(new LatLng(mLastKnownLocation.getLatitude(),
+                                            mLastKnownLocation.getLongitude()), matram)
+                                    .width(5)
+                                    .color(Color.RED));
                             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
-                            mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
-                                    mLastKnownLocation.getLongitude())));
+                            markerGoogle = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude())).title("Google"));
                             mGoogleMap.moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                             mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -322,7 +318,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -359,7 +355,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     (new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                            Log.d(TAG, "onComplete 1: %"+task.isSuccessful());
+                            Log.d(TAG, "onComplete 1: %" + task.isSuccessful());
                             if (task.isSuccessful() && task.getResult() != null) {
                                 PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
                                 Log.d(TAG, "onComplete 2: %");
@@ -418,6 +414,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             getLocationPermission();
         }
     }
+
     private void openPlacesDialog() {
         // Ask the user to choose the place where they are now.
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -450,12 +447,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .show();
     }
 
-
-
-
-
-
-
     @Override
     public void onLocationChanged(Location location) {
         Toast.makeText(MapsActivity.this, "onLocationChanged :", Toast.LENGTH_LONG).show();
@@ -476,36 +467,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
-        int Radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
-                * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        double valueResult = Radius * c;
-        double km = valueResult / 1;
-        DecimalFormat newFormat = new DecimalFormat("####");
-        int kmInDec = Integer.valueOf(newFormat.format(km));
-        double meter = valueResult % 1000;
-        int meterInDec = Integer.valueOf(newFormat.format(meter));
-        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-                + " Meter   " + meterInDec);
-
-        return Radius * c;
-    }
-
-
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (marker.equals(markerGoogle)) {
-            Toast.makeText(MapsActivity.this, marker.getPosition().latitude + " " + marker.getPosition().longitude, Toast.LENGTH_SHORT).show();
+            double distanceGPS = SphericalUtil.computeDistanceBetween(markerGoogle.getPosition(), markerMatram.getPosition());
+            Toast.makeText(MapsActivity.this, "Distances Places: " + formatNumber(distanceGPS), Toast.LENGTH_SHORT).show();
+            Log.d("dungtran Distance GG ",formatNumber(distanceGPS)+"");
+        }else if (marker.equals(markerGPS)) {
+            double distancePlace = SphericalUtil.computeDistanceBetween(markerGPS.getPosition(), markerMatram.getPosition());
+            Toast.makeText(MapsActivity.this, "Distances GPS: " + formatNumber(distancePlace), Toast.LENGTH_SHORT).show();
+            Log.d("dungtran Distance  GPS", formatNumber(distancePlace)+"");
         }
         return false;
     }
@@ -524,4 +495,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onConnectionSuspended(int i) {
 
     }
+
 }
