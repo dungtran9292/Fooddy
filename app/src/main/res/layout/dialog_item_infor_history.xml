@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_bound"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="98dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:cardCornerRadius="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#e0e0e0"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#e0e0e0"
+                android:orientation="vertical"
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Mã Trạm : "
+                        android:id="@+id/img_type"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"/>
+
+                    <TextView
+                        android:id="@+id/ma_tram"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HNI1003"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_toEndOf="@+id/img_type" />
+
+                    <ImageButton
+                        android:id="@+id/btnShow"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_toStartOf="@+id/btn_close"
+                        android:background="@drawable/if_gps_location_map_marker" />
+
+                    <ImageView
+                        android:layout_marginRight="10dp"
+                        android:id="@+id/btn_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignTop="@+id/ma_tram"
+                        android:src="@drawable/ic_close_black_24dp" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/txt_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jul 8, 2017, 19:57"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="5sp"
+                android:paddingRight="5sp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white" />
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trạm :"
+                    />
+
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Kinh độ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/kd_tram"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 ms"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vĩ độ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/vd_tram"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="105.81379705667496"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="K-Cách (*)"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="N/A"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GPS :"
+                    />
+
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Kinh độ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/kd_gps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 ms"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vĩ độ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/vd_gps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 Mbps"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="K-Cách (*)"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/distance_gps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 Mbps"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Google Map :"
+                    />
+
+                <LinearLayout
+                    android:paddingBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Kinh độ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/kd_gg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 ms"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vĩ độ"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/vd_gg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 Mbps"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="K-Cách (*)"
+                            android:textAlignment="center"
+                            android:textColor="@color/tab_checked"
+                            android:textSize="12sp"
+                            android:textStyle="normal|bold" />
+
+                        <TextView
+                            android:id="@+id/distance_gg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 Mbps"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/background_dark"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

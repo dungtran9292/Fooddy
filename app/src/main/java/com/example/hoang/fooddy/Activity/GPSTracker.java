@@ -30,7 +30,6 @@ public class GPSTracker implements LocationListener {
 //		System.out.println("getLocation():" + getLocation());
     }
 
-
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext
@@ -153,4 +152,6 @@ public class GPSTracker implements LocationListener {
         // TODO Auto-generated method stub
 
     }
+
+
 }

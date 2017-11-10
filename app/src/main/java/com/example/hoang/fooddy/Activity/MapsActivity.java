@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,9 +60,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         GoogleApiClient.ConnectionCallbacks {
 
     private GoogleMap mGoogleMap;
-    LatLng currentPstGPS, positionChange;
+    LatLng currentPstGPS, positionChange , positionChangeGPS;
     GPSTracker gps;
     Marker markerGPS, markerGoogle , markerMatram;
+
+    //
+
+    TextView ma_tram, kd_tram ,vd_tram,kd_gps,vd_gps,kd_gg,vd_gg,distance_gg,distance_gps,txt_date;
+    LinearLayout rl_dialog_info_type;
+    ImageView btn_close;
 
 
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -108,6 +119,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
+        initView();
         gps = new GPSTracker(this);
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
@@ -132,6 +144,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
+    private void initView() {
+        ma_tram = (TextView) findViewById(R.id.ma_tram);
+        vd_tram = (TextView) findViewById(R.id.vd_tram);
+        kd_tram = (TextView) findViewById(R.id.kd_tram);
+        vd_gps = (TextView) findViewById(R.id.vd_gps);
+        kd_gps = (TextView) findViewById(R.id.kd_gps);
+        distance_gps = (TextView) findViewById(R.id.distance_gps);
+        distance_gg = (TextView) findViewById(R.id.distance_gg);
+        vd_gg = (TextView) findViewById(R.id.vd_gg);
+        kd_gg = (TextView) findViewById(R.id.kd_gg);
+        rl_dialog_info_type = (LinearLayout) findViewById(R.id.rl_dialog_info_type);
+        btn_close = (ImageView) findViewById(R.id.btn_close);
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissDialog();
+            }
+        });
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         if (mGoogleMap != null) {
@@ -144,6 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        final Handler handler = new Handler();
         matram = new LatLng(21.004245513724932, 105.81379705667496);
         mGoogleMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
@@ -166,6 +200,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mGoogleMap.setOnMarkerClickListener(this);
         markerMatram =  mGoogleMap.addMarker(new MarkerOptions().position(matram).title("Ma Tram"));
         markerGPS = mGoogleMap.addMarker(new MarkerOptions().position(currentPstGPS).title("GPS "));
+
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                if (gps != null) {
+                    positionChangeGPS = new LatLng(gps.getLatitude(), gps.getLongitude());
+                    Log.d("dungtran positionChangeGPS" , positionChange.latitude + " "+positionChangeGPS.longitude );
+                    handler.postDelayed(this,GPSTracker.MIN_TIME_BW_UPDATES);
+                }
+            }
+        };
+        handler.postDelayed(run,5000);
+
+
+
+        Log.d("dungtran currentPstGPS",gps.getLatitude()+" "+gps.getLongitude() );
         Polyline gpsTracker = mGoogleMap.addPolyline(new PolylineOptions()
                 .add(currentPstGPS, matram)
                 .width(5)
@@ -215,10 +265,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         public void onMyLocationChange(Location location) {
              positionChange = new LatLng(location.getLatitude(),
                     location.getLongitude());
-            if(mGoogleMap != null){
-                mGoogleMap.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(positionChange, 16.0f));
-            }
+//            if(mGoogleMap != null){
+//                mGoogleMap.animateCamera(
+//                        CameraUpdateFactory.newLatLngZoom(positionChange, 16.0f));
+//            }
+
+            Log.d("dungtran positionChange",positionChange.latitude + " "+positionChange.longitude);
         }
     };
 
@@ -242,15 +294,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    /**
-     * Prompts the user for permission to use the device location.
-     */
     private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -477,8 +521,66 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             double distancePlace = SphericalUtil.computeDistanceBetween(markerGPS.getPosition(), markerMatram.getPosition());
             Toast.makeText(MapsActivity.this, "Distances GPS: " + formatNumber(distancePlace), Toast.LENGTH_SHORT).show();
             Log.d("dungtran Distance  GPS", formatNumber(distancePlace)+"");
+        }else if (marker.equals(markerMatram)) {
+            showPoPup();
         }
         return false;
+    }
+
+    private void showPoPup() {
+       // vido : lat , kinhdo : long
+
+
+        matram = new LatLng(21.004245513724932, 105.81379705667496);
+        vd_tram.setText("21.0042455137");
+        kd_tram.setText("105.813797056");
+        // gps
+        if (positionChangeGPS != null){
+            double distanceGPS = SphericalUtil.computeDistanceBetween(positionChangeGPS, markerMatram.getPosition());
+            vd_gps.setText(positionChangeGPS.latitude+"");
+            kd_gps.setText(positionChangeGPS.longitude+"");
+            distance_gps.setText(formatNumber(distanceGPS)+"");
+        }else {
+            double distanceGPS = SphericalUtil.computeDistanceBetween(markerGPS.getPosition(), markerMatram.getPosition());
+            vd_gps.setText(markerGPS.getPosition().latitude+"");
+            kd_gps.setText(markerGPS.getPosition().longitude+"");
+            distance_gps.setText(formatNumber(distanceGPS)+"");
+        }
+
+        // plcase api
+        if (positionChange != null) {
+            vd_gg.setText(positionChange.latitude+"");
+            kd_gg.setText(positionChange.longitude+"");
+            double distanceGG = SphericalUtil.computeDistanceBetween(positionChange, markerMatram.getPosition());
+            distance_gg.setText(formatNumber(distanceGG)+"");
+        }else {
+            vd_gg.setText(markerGoogle.getPosition().latitude+"");
+            kd_gg.setText(markerGoogle.getPosition().longitude+"");
+            double distanceGG = SphericalUtil.computeDistanceBetween(markerGoogle.getPosition(), markerMatram.getPosition());
+            distance_gg.setText(formatNumber(distanceGG)+"");
+        }
+
+        TranslateAnimation anim = new TranslateAnimation( 0, 0 , 1000, 0 );
+        anim.setDuration(500);
+        anim.setFillAfter( true );
+        rl_dialog_info_type.startAnimation(anim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                rl_dialog_info_type.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override
@@ -495,5 +597,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onConnectionSuspended(int i) {
 
     }
+
+    public void dismissDialog(){
+        TranslateAnimation anim = new TranslateAnimation( 0, 0 , 0, 2000 );
+        anim.setDuration(200);
+        anim.setFillAfter( true );
+        rl_dialog_info_type.startAnimation(anim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                rl_dialog_info_type.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
 
 }
